@@ -5,16 +5,16 @@ import (
 	"os"
 	"strings"
 
-	"github.com/alvinunreal/tmuxai/config"
-	"github.com/alvinunreal/tmuxai/logger"
-	"github.com/alvinunreal/tmuxai/system"
+	"github.com/Danissimode/Palto/config"
+	"github.com/Danissimode/Palto/logger"
+	"github.com/Danissimode/Palto/system"
 )
 
 const helpMessage = `Available commands:
 - /info: Display system information
 - /clear: Clear the chat history
 - /reset: Reset the chat history
-- /prepare: Prepare the pane for TmuxAI automation
+- /prepare: Prepare the pane for Paltopals automation
 - /watch <prompt>: Start watch mode
 - /squash: Summarize the chat history
 - /exit: Exit the application`
@@ -82,14 +82,14 @@ func (m *Manager) ProcessSubCommand(command string) {
 
 	case prefixMatch(commandPrefix, "/clear"):
 		m.Messages = []ChatMessage{}
-		system.TmuxClearPane(m.PaneId)
+		system.PaltoClearPane(m.PaneId)
 		return
 
 	case prefixMatch(commandPrefix, "/reset"):
 		m.Status = ""
 		m.Messages = []ChatMessage{}
-		system.TmuxClearPane(m.PaneId)
-		system.TmuxClearPane(m.ExecPane.Id)
+		system.PaltoClearPane(m.PaneId)
+		system.PaltoClearPane(m.ExecPane.Id)
 		return
 
 	case prefixMatch(commandPrefix, "/exit"):
@@ -157,7 +157,7 @@ func prefixMatch(command, target string) bool {
 	return strings.HasPrefix(target, command)
 }
 
-// formats system information and tmux details into a readable string
+// formats system information and Palto details into a readable string
 func (m *Manager) formatInfo() {
 	formatter := system.NewInfoFormatter()
 	const labelWidth = 18 // Width of the label column
@@ -190,11 +190,11 @@ func (m *Manager) formatInfo() {
 	fmt.Printf("%-*s  %s\n", labelWidth, "", formatter.FormatProgressBar(usagePercent, 10))
 	formatLine("Max Size", fmt.Sprintf("%d tokens", m.GetMaxContextSize()))
 
-	// Display tmux panes section
+	// Display Palto panes section
 	fmt.Println()
-	fmt.Println(formatter.FormatSection("Tmux Window Panes"))
+	fmt.Println(formatter.FormatSection("Palto Window Panes"))
 
-	panes, _ := m.GetTmuxPanes()
+	panes, _ := m.GetPaltoPanes()
 	for _, pane := range panes {
 		pane.Refresh(m.GetMaxCaptureLines())
 		fmt.Println(pane.FormatInfo(formatter))

@@ -8,19 +8,19 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/alvinunreal/tmuxai/logger"
+	"github.com/Danissimode/Palto/logger"
 )
 
-// TmuxCreateNewPane creates a new horizontal split pane in the specified window and returns its ID
-func TmuxCreateNewPane(target string) (string, error) {
-	cmd := exec.Command("tmux", "split-window", "-d", "-h", "-t", target, "-P", "-F", "#{pane_id}")
+// PaltoCreateNewPane creates a new horizontal split pane in the specified window and returns its ID
+func PaltoCreateNewPane(target string) (string, error) {
+	cmd := exec.Command("Palto", "split-window", "-d", "-h", "-t", target, "-P", "-F", "#{pane_id}")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
 	if err != nil {
-		logger.Error("Failed to create tmux pane: %v, stderr: %s", err, stderr.String())
+		logger.Error("Failed to create Palto pane: %v, stderr: %s", err, stderr.String())
 		return "", err
 	}
 
@@ -28,16 +28,16 @@ func TmuxCreateNewPane(target string) (string, error) {
 	return paneId, nil
 }
 
-// TmuxPanesDetails gets details for all panes in a target window
-func TmuxPanesDetails(target string) ([]TmuxPaneDetails, error) {
-	cmd := exec.Command("tmux", "list-panes", "-t", target, "-F", "#{pane_id},#{pane_active},#{pane_pid},#{pane_current_command},#{history_size},#{history_limit}")
+// PaltoPanesDetails gets details for all panes in a target window
+func PaltoPanesDetails(target string) ([]PaltoPaneDetails, error) {
+	cmd := exec.Command("Palto", "list-panes", "-t", target, "-F", "#{pane_id},#{pane_active},#{pane_pid},#{pane_current_command},#{history_size},#{history_limit}")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
 	if err != nil {
-		logger.Error("Failed to get tmux pane details for target %s %v, stderr: %s", target, err, stderr.String())
+		logger.Error("Failed to get Palto pane details for target %s %v, stderr: %s", target, err, stderr.String())
 		return nil, err
 	}
 
@@ -47,7 +47,7 @@ func TmuxPanesDetails(target string) ([]TmuxPaneDetails, error) {
 	}
 
 	lines := strings.Split(output, "\n")
-	paneDetails := make([]TmuxPaneDetails, 0, len(lines))
+	paneDetails := make([]PaltoPaneDetails, 0, len(lines))
 
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
@@ -75,7 +75,7 @@ func TmuxPanesDetails(target string) ([]TmuxPaneDetails, error) {
 		currentCommandArgs := GetProcessArgs(pid)
 		isSubShell := IsSubShell(parts[3])
 
-		paneDetail := TmuxPaneDetails{
+		paneDetail := PaltoPaneDetails{
 			Id:                 id,
 			IsActive:           active,
 			CurrentPid:         pid,
@@ -92,9 +92,9 @@ func TmuxPanesDetails(target string) ([]TmuxPaneDetails, error) {
 	return paneDetails, nil
 }
 
-// TmuxCapturePane gets the content of a specific pane by ID
-func TmuxCapturePane(paneId string, maxLines int) (string, error) {
-	cmd := exec.Command("tmux", "capture-pane", "-p", "-t", paneId, "-S", fmt.Sprintf("-%d", maxLines))
+// PaltoCapturePane gets the content of a specific pane by ID
+func PaltoCapturePane(paneId string, maxLines int) (string, error) {
+	cmd := exec.Command("Palto", "capture-pane", "-p", "-t", paneId, "-S", fmt.Sprintf("-%d", maxLines))
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
@@ -109,14 +109,14 @@ func TmuxCapturePane(paneId string, maxLines int) (string, error) {
 	return content, nil
 }
 
-// Return current tmux window target with session id and window id
-func TmuxCurrentWindowTarget() (string, error) {
-	paneId, err := TmuxCurrentPaneId()
+// Return current Palto window target with session id and window id
+func PaltoCurrentWindowTarget() (string, error) {
+	paneId, err := PaltoCurrentPaneId()
 	if err != nil {
 		return "", err
 	}
 
-	cmd := exec.Command("tmux", "list-panes", "-t", paneId, "-F", "#{session_id}:#{window_index}")
+	cmd := exec.Command("Palto", "list-panes", "-t", paneId, "-F", "#{session_id}:#{window_index}")
 	output, err := cmd.Output()
 	if err != nil {
 		return "", fmt.Errorf("failed to get window target: %w", err)
@@ -134,44 +134,44 @@ func TmuxCurrentWindowTarget() (string, error) {
 	return target, nil
 }
 
-func TmuxCurrentPaneId() (string, error) {
-	tmuxPane := os.Getenv("TMUX_PANE")
-	if tmuxPane == "" {
-		return "", fmt.Errorf("TMUX_PANE environment variable not set")
+func PaltoCurrentPaneId() (string, error) {
+	PaltoPane := os.Getenv("Palto_PANE")
+	if PaltoPane == "" {
+		return "", fmt.Errorf("Palto_PANE environment variable not set")
 	}
 
-	return tmuxPane, nil
+	return PaltoPane, nil
 }
 
-// CreateTmuxSession creates a new tmux session and returns the new pane id
-func TmuxCreateSession() (string, error) {
-	cmd := exec.Command("tmux", "new-session", "-d", "-P", "-F", "#{pane_id}")
+// CreatePaltoSession creates a new Palto session and returns the new pane id
+func PaltoCreateSession() (string, error) {
+	cmd := exec.Command("Palto", "new-session", "-d", "-P", "-F", "#{pane_id}")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
-		logger.Error("Failed to create tmux session: %v, stderr: %s", err, stderr.String())
+		logger.Error("Failed to create Palto session: %v, stderr: %s", err, stderr.String())
 		return "", err
 	}
 
 	return strings.TrimSpace(stdout.String()), nil
 }
 
-// AttachToTmuxSession attaches to an existing tmux session
-func TmuxAttachSession(paneId string) error {
-	cmd := exec.Command("tmux", "attach-session", "-t", paneId)
+// AttachToPaltoSession attaches to an existing Palto session
+func PaltoAttachSession(paneId string) error {
+	cmd := exec.Command("Palto", "attach-session", "-t", paneId)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		logger.Error("Failed to attach to tmux session: %v", err)
+		logger.Error("Failed to attach to Palto session: %v", err)
 		return err
 	}
 	return nil
 }
 
-func TmuxClearPane(paneId string) error {
-	paneDetails, err := TmuxPanesDetails(paneId)
+func PaltoClearPane(paneId string) error {
+	paneDetails, err := PaltoPanesDetails(paneId)
 	if err != nil {
 		logger.Error("Failed to get pane details for %s: %v", paneId, err)
 		return err
@@ -181,19 +181,19 @@ func TmuxClearPane(paneId string) error {
 		return fmt.Errorf("no pane details found for pane %s", paneId)
 	}
 
-	cmd := exec.Command("tmux", "split-window", "-vp", "100", "-t", paneId)
+	cmd := exec.Command("Palto", "split-window", "-vp", "100", "-t", paneId)
 	if err := cmd.Run(); err != nil {
 		logger.Error("Failed to split window for pane %s: %v", paneId, err)
 		return err
 	}
 
-	cmd = exec.Command("tmux", "clear-history", "-t", paneId)
+	cmd = exec.Command("Palto", "clear-history", "-t", paneId)
 	if err := cmd.Run(); err != nil {
 		logger.Error("Failed to clear history for pane %s: %v", paneId, err)
 		return err
 	}
 
-	cmd = exec.Command("tmux", "kill-pane")
+	cmd = exec.Command("Palto", "kill-pane")
 	if err := cmd.Run(); err != nil {
 		logger.Error("Failed to kill temporary pane: %v", err)
 		return err

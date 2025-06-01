@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alvinunreal/tmuxai/config"
-	"github.com/alvinunreal/tmuxai/logger"
+	"github.com/Danissimode/Palto/config"
+	"github.com/Danissimode/Palto/logger"
 	"github.com/chzyer/readline"
 )
 

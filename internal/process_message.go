@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/alvinunreal/tmuxai/logger"
-	"github.com/alvinunreal/tmuxai/system"
+	"github.com/Danissimode/Palto/logger"
+	"github.com/Danissimode/Palto/system"
 	"github.com/briandowns/spinner"
 )
 
@@ -28,13 +28,13 @@ func (m *Manager) ProcessUserMessage(ctx context.Context, message string) bool {
 		return false
 	}
 
-	currentTmuxWindow := m.GetTmuxPanesInXml(m.Config)
+	currentPaltoWindow := m.GetPaltoPanesInXml(m.Config)
 	execPaneEnv := ""
 	if !m.ExecPane.IsSubShell {
 		execPaneEnv = fmt.Sprintf("Keep in mind, you are working within the shell: %s and OS: %s", m.ExecPane.Shell, m.ExecPane.OS)
 	}
 	currentMessage := ChatMessage{
-		Content:   currentTmuxWindow + "\n\n" + execPaneEnv + "\n\n" + message,
+		Content:   currentPaltoWindow + "\n\n" + execPaneEnv + "\n\n" + message,
 		FromUser:  true,
 		Timestamp: time.Now(),
 	}
@@ -149,7 +149,7 @@ func (m *Manager) ProcessUserMessage(ctx context.Context, message string) bool {
 			if m.ExecPane.IsPrepared {
 				m.ExecWaitCapture(command)
 			} else {
-				system.TmuxSendCommandToPane(m.ExecPane.Id, command, true)
+				system.PaltoSendCommandToPane(m.ExecPane.Id, command, true)
 				time.Sleep(1 * time.Second)
 			}
 		} else {
@@ -192,7 +192,7 @@ func (m *Manager) ProcessUserMessage(ctx context.Context, message string) bool {
 		// Send each key with delay
 		for _, sendKey := range r.SendKeys {
 			m.Println("Sending keys: " + sendKey)
-			system.TmuxSendCommandToPane(m.ExecPane.Id, sendKey, false)
+			system.PaltoSendCommandToPane(m.ExecPane.Id, sendKey, false)
 			time.Sleep(1 * time.Second)
 		}
 	}
@@ -222,7 +222,7 @@ func (m *Manager) ProcessUserMessage(ctx context.Context, message string) bool {
 
 		if isSafe {
 			m.Println("Pasting...")
-			system.TmuxSendCommandToPane(m.ExecPane.Id, r.PasteMultilineContent, true)
+			system.PaltoSendCommandToPane(m.ExecPane.Id, r.PasteMultilineContent, true)
 			time.Sleep(1 * time.Second)
 		} else {
 			m.Status = ""

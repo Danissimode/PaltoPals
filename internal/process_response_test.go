@@ -43,7 +43,7 @@ func TestParseAIResponse_RequestAccomplished_CodeBlock(t *testing.T) {
 // Test: Multiple tags, mixed content
 func TestParseAIResponse_MultipleTags_MixedContent(t *testing.T) {
 	m := &Manager{}
-	input := "Here is some lines and than the tag.\n```\n<TmuxSendKeys>SOmething</TmuxSendKeys>\n```\nMore content\n```<ExecPaneSeemsBusy>```"
+	input := "Here is some lines and than the tag.\n```\n<PaltoSendKeys>SOmething</PaltoSendKeys>\n```\nMore content\n```<ExecPaneSeemsBusy>```"
 	want := AIResponse{
 		Message:           "Here is some lines and than the tag.\nMore content",
 		SendKeys:          []string{"SOmething"},
@@ -61,7 +61,7 @@ func TestParseAIResponse_MultipleTags_MixedContent(t *testing.T) {
 // Test: Array field extraction
 func TestParseAIResponse_SendKeys_Array(t *testing.T) {
 	m := &Manager{}
-	input := "<TmuxSendKeys>foo</TmuxSendKeys><TmuxSendKeys>bar</TmuxSendKeys>"
+	input := "<PaltoSendKeys>foo</PaltoSendKeys><PaltoSendKeys>bar</PaltoSendKeys>"
 	want := AIResponse{
 		SendKeys: []string{"foo", "bar"},
 	}
@@ -143,7 +143,7 @@ func TestParseAIResponse_NoComment(t *testing.T) {
 // Test: Multiline tag content
 func TestParseAIResponse_SendKeys_Multiline(t *testing.T) {
 	m := &Manager{}
-	input := "<TmuxSendKeys>line1\nline2</TmuxSendKeys>"
+	input := "<PaltoSendKeys>line1\nline2</PaltoSendKeys>"
 	want := AIResponse{
 		SendKeys: []string{"line1\nline2"},
 	}
@@ -188,10 +188,10 @@ func TestParseAIResponse_NonAIXMLTagsAndBackticksPreserved(t *testing.T) {
 	}
 }
 
-// Test: XML entity decoding in TmuxSendKeys
+// Test: XML entity decoding in PaltoSendKeys
 func TestParseAIResponse_SendKeys_XMLEntities(t *testing.T) {
 	m := &Manager{}
-	input := "<TmuxSendKeys>foo &amp; bar &lt;baz&gt; &quot;qux&quot; &apos;zap&apos;</TmuxSendKeys>"
+	input := "<PaltoSendKeys>foo &amp; bar &lt;baz&gt; &quot;qux&quot; &apos;zap&apos;</PaltoSendKeys>"
 	want := AIResponse{
 		SendKeys: []string{`foo & bar <baz> "qux" 'zap'`},
 	}
@@ -204,10 +204,10 @@ func TestParseAIResponse_SendKeys_XMLEntities(t *testing.T) {
 	}
 }
 
-// Test: Mixed encoded and unencoded XML entities in TmuxSendKeys
+// Test: Mixed encoded and unencoded XML entities in PaltoSendKeys
 func TestParseAIResponse_SendKeys_MixedEntities(t *testing.T) {
 	m := &Manager{}
-	input := "<TmuxSendKeys>foo &amp; bar & baz</TmuxSendKeys>"
+	input := "<PaltoSendKeys>foo &amp; bar & baz</PaltoSendKeys>"
 	want := AIResponse{
 		SendKeys: []string{"foo & bar & baz"},
 	}
@@ -220,10 +220,10 @@ func TestParseAIResponse_SendKeys_MixedEntities(t *testing.T) {
 	}
 }
 
-// Test: Multiline content with XML entities in TmuxSendKeys
+// Test: Multiline content with XML entities in PaltoSendKeys
 func TestParseAIResponse_SendKeys_MultilineEntities(t *testing.T) {
 	m := &Manager{}
-	input := "<TmuxSendKeys>line1 &lt;tag&gt;\nline2 &amp; more</TmuxSendKeys>"
+	input := "<PaltoSendKeys>line1 &lt;tag&gt;\nline2 &amp; more</PaltoSendKeys>"
 	want := AIResponse{
 		SendKeys: []string{"line1 <tag>\nline2 & more"},
 	}
@@ -239,7 +239,7 @@ func TestParseAIResponse_SendKeys_MultilineEntities(t *testing.T) {
 // Test: Mixed AI and non-AI XML tags, only AI tags are stripped, others preserved
 func TestParseAIResponse_MixedAIAndNonAIXMLTags(t *testing.T) {
 	m := &Manager{}
-	input := "Message before.\n<TmuxSendKeys>foo</TmuxSendKeys>\n```\n<NotAIResponse>foo</NotAIResponse>\n```\n<MessageTag>bar</MessageTag>\n<RequestAccomplished>1</RequestAccomplished>\nAfter."
+	input := "Message before.\n<PaltoSendKeys>foo</PaltoSendKeys>\n```\n<NotAIResponse>foo</NotAIResponse>\n```\n<MessageTag>bar</MessageTag>\n<RequestAccomplished>1</RequestAccomplished>\nAfter."
 	want := AIResponse{
 		Message:             "Message before.\n```\n<NotAIResponse>foo</NotAIResponse>\n```\n<MessageTag>bar</MessageTag>\nAfter.",
 		SendKeys:            []string{"foo"},

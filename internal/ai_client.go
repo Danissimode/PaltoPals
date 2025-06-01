@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alvinunreal/tmuxai/config"
-	"github.com/alvinunreal/tmuxai/logger"
+	"github.com/Danissimode/Palto/config"
+	"github.com/Danissimode/Palto/logger"
 )
 
 // AiClient represents an AI client for interacting with OpenRouter API
@@ -100,7 +100,7 @@ func (c *AiClient) ChatCompletion(ctx context.Context, messages []Message, model
 		return "", fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	// Remove trailing slash from BaseURL if present: https://github.com/alvinunreal/tmuxai/issues/13
+	// Remove trailing slash from BaseURL if present: https://github.com/Danissimode/Palto/issues/13
 	baseURL := strings.TrimSuffix(c.config.BaseURL, "/")
 	url := baseURL + "/chat/completions"
 
@@ -114,8 +114,8 @@ func (c *AiClient) ChatCompletion(ctx context.Context, messages []Message, model
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+c.config.APIKey)
 
-	req.Header.Set("HTTP-Referer", "https://github.com/alvinunreal/tmuxai")
-	req.Header.Set("X-Title", "TmuxAI")
+	req.Header.Set("HTTP-Referer", "https://github.com/Danissimode/Palto")
+	req.Header.Set("X-Title", "Paltopals")
 
 	// Log the request details for debugging before sending
 	logger.Debug("Sending API request to: %s with model: %s", url, model)

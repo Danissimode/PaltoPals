@@ -1,4 +1,4 @@
-// cli.go: Command-line interface for TmuxAI, including root command and flags
+// cli.go: Command-line interface for Paltopals, including root command and flags
 
 package cli
 
@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/alvinunreal/tmuxai/config"
-	"github.com/alvinunreal/tmuxai/internal"
-	"github.com/alvinunreal/tmuxai/logger"
+	"github.com/Danissimode/Palto/config"
+	"github.com/Danissimode/Palto/internal"
+	"github.com/Danissimode/Palto/logger"
 	"github.com/spf13/cobra"
 )
 
@@ -19,12 +19,12 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "tmuxai [request message]",
-	Short: "TmuxAI - AI-Powered Tmux Companion",
-	Long:  `TmuxAI - AI-Powered Tmux Companion`,
+	Use:   "Paltopals [request message]",
+	Short: "Paltopals - AI-Powered Palto Companion",
+	Long:  `Paltopals - AI-Powered Palto Companion`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		if v, _ := cmd.Flags().GetBool("version"); v {
-			fmt.Printf("tmuxai version: %s\ncommit: %s\nbuild date: %s\n", internal.Version, internal.Commit, internal.Date)
+			fmt.Printf("Paltopals version: %s\ncommit: %s\nbuild date: %s\n", internal.Version, internal.Commit, internal.Date)
 			os.Exit(0)
 		}
 	},

@@ -1,4 +1,4 @@
-module github.com/alvinunreal/tmuxai
+module github.com/Danissimode/Palto
 
 go 1.23.0
 

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alvinunreal/tmuxai/config"
-	"github.com/alvinunreal/tmuxai/logger"
-	"github.com/alvinunreal/tmuxai/system"
+	"github.com/Danissimode/Palto/config"
+	"github.com/Danissimode/Palto/logger"
+	"github.com/Danissimode/Palto/system"
 	"github.com/fatih/color"
 )
 
@@ -30,13 +30,13 @@ type CommandExecHistory struct {
 	Code    int
 }
 
-// Manager represents the TmuxAI manager agent
+// Manager represents the Paltopals manager agent
 type Manager struct {
 	Config           *config.Config
 	AiClient         *AiClient
 	Status           string // running, waiting, done
 	PaneId           string
-	ExecPane         *system.TmuxPaneDetails
+	ExecPane         *system.PaltoPaneDetails
 	Messages         []ChatMessage
 	ExecHistory      []CommandExecHistory
 	WatchMode        bool
@@ -47,26 +47,26 @@ type Manager struct {
 // NewManager creates a new manager agent
 func NewManager(cfg *config.Config) (*Manager, error) {
 	if cfg.OpenRouter.APIKey == "" {
-		fmt.Println("OpenRouter API key is required. Set it in the config file or as an environment variable: TMUXAI_OPENROUTER_API_KEY")
+		fmt.Println("OpenRouter API key is required. Set it in the config file or as an environment variable: Paltopals_OPENROUTER_API_KEY")
 		return nil, fmt.Errorf("OpenRouter API key is required")
 	}
 
-	paneId, err := system.TmuxCurrentPaneId()
+	paneId, err := system.PaltoCurrentPaneId()
 	if err != nil {
-		// If we're not in a tmux session, start a new session and execute the same command
-		paneId, err = system.TmuxCreateSession()
+		// If we're not in a Palto session, start a new session and execute the same command
+		paneId, err = system.PaltoCreateSession()
 		if err != nil {
-			return nil, fmt.Errorf("system.TmuxCreateSession failed: %w", err)
+			return nil, fmt.Errorf("system.PaltoCreateSession failed: %w", err)
 		}
 		args := strings.Join(os.Args[1:], " ")
 
-		system.TmuxSendCommandToPane(paneId, "tmuxai "+args, true)
+		system.PaltoSendCommandToPane(paneId, "Paltopals "+args, true)
 		// shell initialization may take some time
 		time.Sleep(1 * time.Second)
-		system.TmuxSendCommandToPane(paneId, "Enter", false)
-		err = system.TmuxAttachSession(paneId)
+		system.PaltoSendCommandToPane(paneId, "Enter", false)
+		err = system.PaltoAttachSession(paneId)
 		if err != nil {
-			return nil, fmt.Errorf("system.TmuxAttachSession failed: %w", err)
+			return nil, fmt.Errorf("system.PaltoAttachSession failed: %w", err)
 		}
 		os.Exit(0)
 	}
@@ -79,7 +79,7 @@ func NewManager(cfg *config.Config) (*Manager, error) {
 		AiClient:         aiClient,
 		PaneId:           paneId,
 		Messages:         []ChatMessage{},
-		ExecPane:         &system.TmuxPaneDetails{},
+		ExecPane:         &system.PaltoPaneDetails{},
 		OS:               os,
 		SessionOverrides: make(map[string]interface{}),
 	}
@@ -112,7 +112,7 @@ func (m *Manager) GetConfig() *config.Config {
 
 // getPrompt returns the prompt string with color
 func (m *Manager) GetPrompt() string {
-	tmuxaiColor := color.New(color.FgGreen, color.Bold)
+	PaltopalsColor := color.New(color.FgGreen, color.Bold)
 	arrowColor := color.New(color.FgYellow, color.Bold)
 	stateColor := color.New(color.FgMagenta, color.Bold)
 
@@ -131,7 +131,7 @@ func (m *Manager) GetPrompt() string {
 		stateSymbol = "∞"
 	}
 
-	prompt := tmuxaiColor.Sprint("TmuxAI")
+	prompt := PaltopalsColor.Sprint("Paltopals")
 	if stateSymbol != "" {
 		prompt += " " + stateColor.Sprint("["+stateSymbol+"]")
 	}

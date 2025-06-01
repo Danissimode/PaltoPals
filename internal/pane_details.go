@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/alvinunreal/tmuxai/config"
-	"github.com/alvinunreal/tmuxai/system"
+	"github.com/Danissimode/Palto/config"
+	"github.com/Danissimode/Palto/system"
 )
 
-func (m *Manager) GetTmuxPanes() ([]system.TmuxPaneDetails, error) {
-	currentPaneId, _ := system.TmuxCurrentPaneId()
-	windowTarget, _ := system.TmuxCurrentWindowTarget()
-	currentPanes, _ := system.TmuxPanesDetails(windowTarget)
+func (m *Manager) GetPaltoPanes() ([]system.PaltoPaneDetails, error) {
+	currentPaneId, _ := system.PaltoCurrentPaneId()
+	windowTarget, _ := system.PaltoCurrentWindowTarget()
+	currentPanes, _ := system.PaltoPanesDetails(windowTarget)
 
 	for i := range currentPanes {
-		currentPanes[i].IsTmuxAiPane = currentPanes[i].Id == currentPaneId
-		currentPanes[i].IsTmuxAiExecPane = currentPanes[i].Id == m.ExecPane.Id
+		currentPanes[i].IsPaltopalsPane = currentPanes[i].Id == currentPaneId
+		currentPanes[i].IsPaltopalsExecPane = currentPanes[i].Id == m.ExecPane.Id
 		currentPanes[i].IsPrepared = currentPanes[i].Id == m.ExecPane.Id
 		if currentPanes[i].IsSubShell {
 			currentPanes[i].OS = "OS Unknown (subshell)"
@@ -27,58 +27,58 @@ func (m *Manager) GetTmuxPanes() ([]system.TmuxPaneDetails, error) {
 	return currentPanes, nil
 }
 
-func (m *Manager) GetTmuxPanesInXml(config *config.Config) string {
-	currentTmuxWindow := strings.Builder{}
-	currentTmuxWindow.WriteString("<current_tmux_window_state>\n")
-	panes, _ := m.GetTmuxPanes()
+func (m *Manager) GetPaltoPanesInXml(config *config.Config) string {
+	currentPaltoWindow := strings.Builder{}
+	currentPaltoWindow.WriteString("<current_Palto_window_state>\n")
+	panes, _ := m.GetPaltoPanes()
 
-	// Filter out tmuxai_pane
-	var filteredPanes []system.TmuxPaneDetails
+	// Filter out Paltopals_pane
+	var filteredPanes []system.PaltoPaneDetails
 	for _, p := range panes {
-		if !p.IsTmuxAiPane {
+		if !p.IsPaltopalsPane {
 			filteredPanes = append(filteredPanes, p)
 		}
 	}
 	for _, pane := range filteredPanes {
-		if !pane.IsTmuxAiPane {
+		if !pane.IsPaltopalsPane {
 			pane.Refresh(m.GetMaxCaptureLines())
 		}
-		if pane.IsTmuxAiExecPane {
+		if pane.IsPaltopalsExecPane {
 			m.ExecPane = &pane
 		}
 
 		var title string
-		if pane.IsTmuxAiExecPane {
-			title = "tmuxai_exec_pane"
+		if pane.IsPaltopalsExecPane {
+			title = "Paltopals_exec_pane"
 		} else {
 			title = "read_only_pane"
 		}
 
-		currentTmuxWindow.WriteString(fmt.Sprintf("<%s>\n", title))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - Id: %s\n", pane.Id))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - CurrentPid: %d\n", pane.CurrentPid))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - CurrentCommand: %s\n", pane.CurrentCommand))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - CurrentCommandArgs: %s\n", pane.CurrentCommandArgs))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - Shell: %s\n", pane.Shell))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - OS: %s\n", pane.OS))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - LastLine: %s\n", pane.LastLine))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - IsActive: %d\n", pane.IsActive))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - IsTmuxAiPane: %t\n", pane.IsTmuxAiPane))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - IsTmuxAiExecPane: %t\n", pane.IsTmuxAiExecPane))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - IsPrepared: %t\n", pane.IsPrepared))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - IsSubShell: %t\n", pane.IsSubShell))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - HistorySize: %d\n", pane.HistorySize))
-		currentTmuxWindow.WriteString(fmt.Sprintf(" - HistoryLimit: %d\n", pane.HistoryLimit))
+		currentPaltoWindow.WriteString(fmt.Sprintf("<%s>\n", title))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - Id: %s\n", pane.Id))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - CurrentPid: %d\n", pane.CurrentPid))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - CurrentCommand: %s\n", pane.CurrentCommand))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - CurrentCommandArgs: %s\n", pane.CurrentCommandArgs))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - Shell: %s\n", pane.Shell))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - OS: %s\n", pane.OS))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - LastLine: %s\n", pane.LastLine))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - IsActive: %d\n", pane.IsActive))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - IsPaltopalsPane: %t\n", pane.IsPaltopalsPane))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - IsPaltopalsExecPane: %t\n", pane.IsPaltopalsExecPane))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - IsPrepared: %t\n", pane.IsPrepared))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - IsSubShell: %t\n", pane.IsSubShell))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - HistorySize: %d\n", pane.HistorySize))
+		currentPaltoWindow.WriteString(fmt.Sprintf(" - HistoryLimit: %d\n", pane.HistoryLimit))
 
-		if !pane.IsTmuxAiPane && pane.Content != "" {
-			currentTmuxWindow.WriteString("<pane_content>\n")
-			currentTmuxWindow.WriteString(pane.Content)
-			currentTmuxWindow.WriteString("\n</pane_content>\n")
+		if !pane.IsPaltopalsPane && pane.Content != "" {
+			currentPaltoWindow.WriteString("<pane_content>\n")
+			currentPaltoWindow.WriteString(pane.Content)
+			currentPaltoWindow.WriteString("\n</pane_content>\n")
 		}
 
-		currentTmuxWindow.WriteString(fmt.Sprintf("</%s>\n\n", title))
+		currentPaltoWindow.WriteString(fmt.Sprintf("</%s>\n\n", title))
 	}
 
-	currentTmuxWindow.WriteString("</current_tmux_window_state>\n")
-	return currentTmuxWindow.String()
+	currentPaltoWindow.WriteString("</current_Palto_window_state>\n")
+	return currentPaltoWindow.String()
 }

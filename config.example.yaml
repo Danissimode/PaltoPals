@@ -30,7 +30,7 @@ openrouter:
 #   model: gemma3:1b
 #   base_url: http://localhost:11434/v1
 
-debug: false # Set to true to log full AI messages sent and received. Dest: ~/.config/tmuxai/debug/
+debug: false # Set to true to log full AI messages sent and received. Dest: ~/.config/Paltopals/debug/
 
 # AI generated and not verified - use with caution!!
 # All confirmations are checked based on these patterns

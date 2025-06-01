@@ -6,10 +6,10 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/alvinunreal/tmuxai/logger"
+	"github.com/Danissimode/Palto/logger"
 )
 
-func TmuxSendCommandToPane(paneId string, command string, autoenter bool) error {
+func PaltoSendCommandToPane(paneId string, command string, autoenter bool) error {
 	lines := strings.Split(command, "\n")
 	for i, line := range lines {
 
@@ -19,7 +19,7 @@ func TmuxSendCommandToPane(paneId string, command string, autoenter bool) error 
 				if strings.HasSuffix(line, ";") {
 					line = line[:len(line)-1] + "\\;"
 				}
-				cmd := exec.Command("tmux", "send-keys", "-t", paneId, "-l", line)
+				cmd := exec.Command("Palto", "send-keys", "-t", paneId, "-l", line)
 				var stderr bytes.Buffer
 				cmd.Stderr = &stderr
 				err := cmd.Run()
@@ -32,7 +32,7 @@ func TmuxSendCommandToPane(paneId string, command string, autoenter bool) error 
 				args := []string{"send-keys", "-t", paneId}
 				processed := processLineWithSpecialKeys(line)
 				args = append(args, processed...)
-				cmd := exec.Command("tmux", args...)
+				cmd := exec.Command("Palto", args...)
 				var stderr bytes.Buffer
 				cmd.Stderr = &stderr
 				err := cmd.Run()
@@ -46,7 +46,7 @@ func TmuxSendCommandToPane(paneId string, command string, autoenter bool) error 
 		// Send Enter key after each line except for empty lines at the end
 		if autoenter {
 			if i < len(lines)-1 || (i == len(lines)-1 && line != "") {
-				enterCmd := exec.Command("tmux", "send-keys", "-t", paneId, "Enter")
+				enterCmd := exec.Command("Palto", "send-keys", "-t", paneId, "Enter")
 				err := enterCmd.Run()
 				if err != nil {
 					logger.Error("Failed to send Enter key to pane %s: %v", paneId, err)
@@ -58,7 +58,7 @@ func TmuxSendCommandToPane(paneId string, command string, autoenter bool) error 
 	return nil
 }
 
-// containsSpecialKey checks if a string contains any tmux special key notation
+// containsSpecialKey checks if a string contains any Palto special key notation
 func containsSpecialKey(line string) bool {
 	// Check for control or meta key combinations
 	if strings.Contains(line, "C-") || strings.Contains(line, "M-") {
@@ -76,7 +76,7 @@ func containsSpecialKey(line string) bool {
 }
 
 // processLineWithSpecialKeys processes a line containing special keys
-// and returns an array of arguments for tmux send-keys
+// and returns an array of arguments for Palto send-keys
 func processLineWithSpecialKeys(line string) []string {
 	var result []string
 	var currentText string
@@ -120,7 +120,7 @@ func processLineWithSpecialKeys(line string) []string {
 	return result
 }
 
-// getSpecialKeys returns a map of tmux special key names
+// getSpecialKeys returns a map of Palto special key names
 func getSpecialKeys() map[string]bool {
 	specialKeys := map[string]bool{
 		"Up": true, "Down": true, "Left": true, "Right": true,

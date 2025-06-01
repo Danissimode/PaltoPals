@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-type TmuxPaneDetails struct {
+type PaltoPaneDetails struct {
 	Id                 string
 	CurrentPid         int
 	CurrentCommand     string
@@ -15,15 +15,15 @@ type TmuxPaneDetails struct {
 	OS                 string
 	LastLine           string
 	IsActive           int
-	IsTmuxAiPane       bool
-	IsTmuxAiExecPane   bool
+	IsPaltopalsPane       bool
+	IsPaltopalsExecPane   bool
 	IsPrepared         bool
 	IsSubShell         bool
 	HistorySize        int
 	HistoryLimit       int
 }
 
-func (p *TmuxPaneDetails) String() string {
+func (p *PaltoPaneDetails) String() string {
 	// ANSI color codes
 	reset := "\033[0m"
 	green := "\033[32m"
@@ -46,22 +46,22 @@ func (p *TmuxPaneDetails) String() string {
 		fmt.Sprintf("Args: %s%s%s\n", gray, p.CurrentCommandArgs, reset) +
 		fmt.Sprintf("Shell: %s%s%s\n", blue, p.Shell, reset) +
 		fmt.Sprintf("OS: %s%s%s\n", gray, p.OS, reset) +
-		fmt.Sprintf("TmuxAI Pane: %s\n", formatBool(p.IsTmuxAiPane)) +
-		fmt.Sprintf("TmuxAI Exec Pane: %s\n", formatBool(p.IsTmuxAiExecPane)) +
+		fmt.Sprintf("Paltopals Pane: %s\n", formatBool(p.IsPaltopalsPane)) +
+		fmt.Sprintf("Paltopals Exec Pane: %s\n", formatBool(p.IsPaltopalsExecPane)) +
 		fmt.Sprintf("Prepared: %s\n", formatBool(p.IsPrepared)) +
 		fmt.Sprintf("Sub Shell: %s\n", formatBool(p.IsSubShell))
 }
 
-func (p *TmuxPaneDetails) FormatInfo(f *InfoFormatter) string {
+func (p *PaltoPaneDetails) FormatInfo(f *InfoFormatter) string {
 	var builder strings.Builder
 
 	cleanId := strings.ReplaceAll(p.Id, "%", "")
 	var paneTitle string
 	switch {
-	case p.IsTmuxAiPane:
-		paneTitle = fmt.Sprintf("%s: TmuxAI", cleanId)
-	case p.IsTmuxAiExecPane:
-		paneTitle = fmt.Sprintf("%s: TmuxAI Exec Pane", cleanId)
+	case p.IsPaltopalsPane:
+		paneTitle = fmt.Sprintf("%s: Paltopals", cleanId)
+	case p.IsPaltopalsExecPane:
+		paneTitle = fmt.Sprintf("%s: Paltopals Exec Pane", cleanId)
 	default:
 		paneTitle = fmt.Sprintf("%s: Read Only", cleanId)
 	}
@@ -89,16 +89,16 @@ func (p *TmuxPaneDetails) FormatInfo(f *InfoFormatter) string {
 	formatLine("OS", p.OS)
 
 	// Add status flags each on their own line
-	formatLine("TmuxAI", f.FormatBool(p.IsTmuxAiPane))
-	formatLine("Exec Pane", f.FormatBool(p.IsTmuxAiExecPane))
+	formatLine("Paltopals", f.FormatBool(p.IsPaltopalsPane))
+	formatLine("Exec Pane", f.FormatBool(p.IsPaltopalsExecPane))
 	formatLine("Prepared", f.FormatBool(p.IsPrepared))
 	formatLine("Sub Shell", f.FormatBool(p.IsSubShell))
 
 	return builder.String()
 }
 
-func (p *TmuxPaneDetails) Refresh(maxLines int) {
-	content, _ := TmuxCapturePane(p.Id, maxLines)
+func (p *PaltoPaneDetails) Refresh(maxLines int) {
+	content, _ := PaltoCapturePane(p.Id, maxLines)
 	p.Content = content
 	p.LastLine = strings.TrimSpace(strings.Split(p.Content, "\n")[len(strings.Split(p.Content, "\n"))-1])
 	p.IsPrepared = strings.HasSuffix(p.LastLine, "»")

@@ -1,6 +1,6 @@
 version: 2
 
-project_name: tmuxai
+project_name: Paltopals
 
 before:
   hooks:
@@ -29,9 +29,9 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Version=v{{.Version}}
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Commit={{.Commit}}
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Date={{.Date}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Version=v{{.Version}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Commit={{.Commit}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Date={{.Date}}
 
   - id: osx
     goos:
@@ -42,9 +42,9 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Version=v{{.Version}}
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Commit={{.Commit}}
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Date={{.Date}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Version=v{{.Version}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Commit={{.Commit}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Date={{.Date}}
 
   - id: windows
     goos:
@@ -55,9 +55,9 @@ builds:
     flags:
       - -trimpath
     ldflags:
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Version=v{{.Version}}
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Commit={{.Commit}}
-      - -s -w -X github.com/alvinunreal/tmuxai/internal.Date={{.Date}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Version=v{{.Version}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Commit={{.Commit}}
+      - -s -w -X github.com/Danissimode/Palto/internal.Date={{.Date}}
 
 archives:
   - name_template: >-
@@ -84,25 +84,25 @@ changelog:
       - "^tasks:"
 
 brews:
-  - name: tmuxai
+  - name: Paltopals
     repository:
-      owner: alvinunreal
-      name: homebrew-tmuxai
+      owner: Danissimode
+      name: homebrew-Paltopals
     commit_author:
-      name: alvinunreal
-      email: alvin@tmuxai.dev
+      name: Danissimode
+      email: alvin@Paltopals.dev
     directory: Formula
     dependencies:
-      - name: tmux
-    homepage: https://tmuxai.dev/
+      - name: Palto
+    homepage: https://Paltopals.dev/
     description: AI-Powered, Non-Intrusive Terminal Assistant
     test: |
-      system "tmuxai version"
+      system "Paltopals version"
 
 nfpms:
   - file_name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-    maintainer: alvinunreal
-    homepage: https://tmuxai.dev
+    maintainer: Danissimode
+    homepage: https://Paltopals.dev
     description: AI-Powered, Non-Intrusive Terminal Assistant
     license: "Apache-2.0"
     formats:
@@ -113,6 +113,6 @@ nfpms:
     section: utils
     contents:
       - src: ./LICENSE
-        dst: /usr/share/doc/tmuxai/copyright
+        dst: /usr/share/doc/Paltopals/copyright
         file_info:
           mode: 0644

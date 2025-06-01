@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # Usage:
-#   curl -sfL https://raw.githubusercontent.com/alvinunreal/tmuxai/main/install.sh | bash
+#   curl -sfL https://raw.githubusercontent.com/Danissimode/Paltopals/main/install.sh | bash
 #   curl -sfL https://.../install.sh | bash -s -- -b /usr/local/bin # Install to custom bin dir
 #   curl -sfL https://.../install.sh | bash -s v1.0.0               # Install specific version (Tag name)
 #
 set -euo pipefail
 
 
-GH_REPO="alvinunreal/tmuxai"
-PROJECT_NAME="tmuxai"
+GH_REPO="Danissimode/Paltopals"
+PROJECT_NAME="Paltopals"
 DEFAULT_INSTALL_DIR="/usr/local/bin"
 
-CONFIG_DIR="$HOME/.config/tmuxai"
+CONFIG_DIR="$HOME/.config/Paltopals"
 CONFIG_FILE="$CONFIG_DIR/config.example.yaml"
-EXAMPLE_CONFIG_URL="https://raw.githubusercontent.com/alvinunreal/tmuxai/main/config.example.yaml"
+EXAMPLE_CONFIG_URL="https://raw.githubusercontent.com/Danissimode/Paltopals/main/config.example.yaml"
 
 tmp_dir=""
 
@@ -66,16 +66,16 @@ main() {
   # Ensure the target installation directory exists
   mkdir -p "$install_dir" || err "Failed to create installation directory: $install_dir"
 
-  # --- Check for tmux ---
-  if ! command_exists tmux; then
+  # --- Check for Palto ---
+  if ! command_exists Palto; then
     info "-----------------------------------------------------------"
-    info "'tmux' command not found."
-    info "tmuxai requires tmux to function."
-    info "Please install tmux:"
-    info "  On Debian/Ubuntu: sudo apt update && sudo apt install tmux"
-    info "  On macOS (Homebrew): brew install tmux"
-    info "  On Fedora: sudo dnf install tmux"
-    info "  On Arch Linux: sudo pacman -S tmux"
+    info "'Palto' command not found."
+    info "Paltopals requires Palto to function."
+    info "Please install Palto:"
+    info "  On Debian/Ubuntu: sudo apt update && sudo apt install Palto"
+    info "  On macOS (Homebrew): brew install Palto"
+    info "  On Fedora: sudo dnf install Palto"
+    info "  On Arch Linux: sudo pacman -S Palto"
     info "-----------------------------------------------------------"
     exit 1
   fi
@@ -248,7 +248,7 @@ main() {
           ;;
   esac
   info ""
-  info "To get started, set the TMUXAI_OPENROUTER_API_KEY environment variable or add it to the config: ${CONFIG_DIR}/config.yaml"
+  info "To get started, set the Paltopals_OPENROUTER_API_KEY environment variable or add it to the config: ${CONFIG_DIR}/config.yaml"
 }
 
 main "$@"

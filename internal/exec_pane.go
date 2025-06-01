@@ -8,27 +8,27 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alvinunreal/tmuxai/logger"
-	"github.com/alvinunreal/tmuxai/system"
+	"github.com/Danissimode/Palto/logger"
+	"github.com/Danissimode/Palto/system"
 )
 
 // GetAvailablePane finds an available pane or creates a new one if none are available
-func (m *Manager) GetAvailablePane() system.TmuxPaneDetails {
-	panes, _ := m.GetTmuxPanes()
+func (m *Manager) GetAvailablePane() system.PaltoPaneDetails {
+	panes, _ := m.GetPaltoPanes()
 	for _, pane := range panes {
-		if !pane.IsTmuxAiPane {
+		if !pane.IsPaltopalsPane {
 			logger.Info("Found available pane: %s", pane.Id)
 			return pane
 		}
 	}
 
-	return system.TmuxPaneDetails{}
+	return system.PaltoPaneDetails{}
 }
 
 func (m *Manager) InitExecPane() {
 	availablePane := m.GetAvailablePane()
 	if availablePane.Id == "" {
-		system.TmuxCreateNewPane(m.PaneId)
+		system.PaltoCreateNewPane(m.PaneId)
 		availablePane = m.GetAvailablePane()
 	}
 	m.ExecPane = &availablePane
@@ -55,12 +55,12 @@ func (m *Manager) PrepareExecPane() {
 		return
 	}
 
-	system.TmuxSendCommandToPane(m.ExecPane.Id, ps1Command, true)
-	system.TmuxSendCommandToPane(m.ExecPane.Id, "C-l", false)
+	system.PaltoSendCommandToPane(m.ExecPane.Id, ps1Command, true)
+	system.PaltoSendCommandToPane(m.ExecPane.Id, "C-l", false)
 }
 
 func (m *Manager) ExecWaitCapture(command string) (CommandExecHistory, error) {
-	system.TmuxSendCommandToPane(m.ExecPane.Id, command, true)
+	system.PaltoSendCommandToPane(m.ExecPane.Id, command, true)
 	m.ExecPane.Refresh(m.GetMaxCaptureLines())
 
 	m.Println("")
@@ -147,7 +147,7 @@ func (m *Manager) parseExecPaneCommandHistory() {
 				}
 			} else {
 				// This prompt line only indicates the end status of the previous command
-				// (like the final "[i] [~/r/tmuxai][16:56][2]»" line).
+				// (like the final "[i] [~/r/Paltopals][16:56][2]»" line).
 				// No new command starts here, so currentCommand remains nil.
 			}
 

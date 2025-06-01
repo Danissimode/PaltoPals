@@ -81,11 +81,11 @@ func Load() (*Config, error) {
 	if err == nil {
 		viper.AddConfigPath(configDir)
 	} else {
-		viper.AddConfigPath(filepath.Join(homeDir, ".config", "tmuxai"))
+		viper.AddConfigPath(filepath.Join(homeDir, ".config", "Paltopals"))
 	}
 
 	// Environment variables
-	viper.SetEnvPrefix("TMUXAI")
+	viper.SetEnvPrefix("Paltopals")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	// Automatically bind all config keys to environment variables
@@ -133,14 +133,14 @@ func EnumerateConfigKeys(cfgType reflect.Type, prefix string) []string {
 	return keys
 }
 
-// GetConfigDir returns the path to the tmuxai config directory (~/.config/tmuxai)
+// GetConfigDir returns the path to the Paltopals config directory (~/.config/Paltopals)
 func GetConfigDir() (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", fmt.Errorf("failed to get user home directory: %w", err)
 	}
 
-	configDir := filepath.Join(homeDir, ".config", "tmuxai")
+	configDir := filepath.Join(homeDir, ".config", "Paltopals")
 	if err := os.MkdirAll(configDir, 0o755); err != nil {
 		return "", fmt.Errorf("failed to create config directory: %w", err)
 	}

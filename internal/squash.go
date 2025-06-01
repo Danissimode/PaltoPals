@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alvinunreal/tmuxai/logger"
-	"github.com/alvinunreal/tmuxai/system"
+	"github.com/Danissimode/Palto/logger"
+	"github.com/Danissimode/Palto/system"
 	"github.com/briandowns/spinner"
 )
 
