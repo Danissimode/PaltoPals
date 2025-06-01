@@ -2,7 +2,7 @@ module github.com/Danissimode/Palto
 
 go 1.23.0
 
-toolchain go1.23.5
+toolchain go1.23.9
 
 require (
 	github.com/alecthomas/chroma v0.10.0

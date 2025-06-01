@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"reflect"
 	"runtime"
-	"slices"
 	"sort"
 	"strings"
 	"unicode"
@@ -109,14 +108,24 @@ func IsShellCommand(command string) bool {
 	shellCommands := []string{
 		"bash", "zsh", "fish", "sh", "dash", "ksh", "csh", "tcsh",
 	}
-	return slices.Contains(shellCommands, command)
+	return containsString(shellCommands, command)
 }
 
 func IsSubShell(command string) bool {
 	subShellCommands := []string{
 		"ssh", "docker", "podman",
 	}
-	return slices.Contains(subShellCommands, command)
+	return containsString(subShellCommands, command)
+}
+
+// containsString проверяет, содержится ли строка в слайсе строк
+func containsString(slice []string, str string) bool {
+	for _, v := range slice {
+		if v == str {
+			return true
+		}
+	}
+	return false
 }
 
 func GetOSDetails() string {
