@@ -1,7 +1,9 @@
+> ⚠️ Данный проект является форком [tmuxai](https://github.com/alvinunreal/tmuxai). Все права и лицензии соблюдены согласно условиям Apache-2.0.
+
 <br/>
 <div align="center">
   <a href="https://github.com/Danissimode/Palto">
-    <img src="https://Paltopals.dev/gh.svg?v=2" alt="Paltopals Logo" width="100%">
+    <img src="./image/palto_icon_512x512.png" alt="Paltopals Logo" width="100%">
   </a>
   <h3 align="center">Paltopals</h3>
   <p align="center">
@@ -54,7 +56,7 @@
 
 ## About The Project
 
-![Product Demo](https://Paltopals.dev/demo.png)
+![Product Demo](./image/palto_demo.png)
 
 Paltopals is an intelligent terminal assistant that lives inside your Palto sessions. Unlike other CLI AI tools, Paltopals observes and understands the content of your Palto panes, providing assistance without requiring you to change your workflow or interrupt your terminal sessions.
 
@@ -123,7 +125,7 @@ After installing Paltopals, you need to configure your API key to start using it
 
 ## Paltopals Layout
 
-![Panes](https://Paltopals.dev/shots/panes.png?lastmode=1)
+![Panes](./image/shots_panes.png?lastmode=1)
 
 Paltopals is designed to operate within a single Palto window, with one instance of
 Paltopals running per window and organizes your workspace using the following pane structure:
@@ -136,7 +138,7 @@ Paltopals running per window and organizes your workspace using the following pa
 
 ## Observe Mode
 
-![Observe Mode](https://Paltopals.dev/shots/demo-observe.png)
+![Observe Mode](./image/shots_demo_observe.png)
 _Paltopals sent the first ping command and is waiting for the countdown to check for the next step_
 
 Paltopals operates by default in "observe mode". Here's how the interaction flow works:
@@ -165,11 +167,11 @@ Paltopals operates by default in "observe mode". Here's how the interaction flow
 
 6. **The conversation continues** until your task is complete.
 
-![Observe Mode Flowchart](https://Paltopals.dev/shots/observe-mode.png)
+![Observe Mode Flowchart](./image/shots_observe_mode.png)
 
 ## Prepare Mode
 
-![Prepare Mode](https://Paltopals.dev/shots/demo-prepare.png?lastmode=1)
+![Prepare Mode](./image/shots_demo_prepare.png?lastmode=1)
 _Paltopals customized the pane prompt and sent the first ping command. Instead of the countdown, it's waiting for command completion_
 
 Prepare mode is an optional feature that enhances Paltopals's ability to work with your terminal by customizing
@@ -199,7 +201,7 @@ username@hostname:~/r/Paltopals[21:05][0]»
 
 ## Watch Mode
 
-![Watch Mode](https://Paltopals.dev/shots/demo-watch.png)
+![Watch Mode](./image/shots_demo_watch.png)
 _Paltopals watching user shell commands and better alternatives_
 
 Watch Mode transforms Paltopals into a proactive assistant that continuously
